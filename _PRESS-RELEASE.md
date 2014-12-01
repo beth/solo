@@ -18,27 +18,36 @@ Once the project moves into development, the press release can be used as a touc
  
 ## Heading ##
   > Name the product in a way the reader (i.e. your target customers) will understand.
+  > Will I Graduate: OK?
 
 ## Sub-Heading ##
   > Describe who the market for the product is and what benefit they get. One sentence only underneath the title.
+  > A tool for Oklahoma high school students and counselors to facilitate completion of graduation requirements.
 
 ## Summary ##
   > Give a summary of the product and the benefit. Assume the reader will not read anything else so make this paragraph good.
+  > This tool allows students to enter current progress towards an Oklahoma high school diploma, then informs the students of what additional requirements must be met to graduate on time. Counselors and teachers can see at a glance what students are missing what requirements and provide intervention accordingly. Additionally, the tool will allow students to see progress towards meeting Oklahoma's Promise requirements, as well allow for preliminary college planning. 
 
 ## Problem ##
   > Describe the problem your product solves.
+  > Many students and parents in Oklahoma are not well informed about the requirements for graduation, especially with changing alternatives to testing. Because of this, students are unable to plan appropriately to ensure they graduate on time. Teachers frequently lack access to information about individual students' progress towards graduation, which can lead to missed opportunities to keep students on-track. 
 
 ## Solution ##
   > Describe how your product elegantly solves the problem.
+  > Will I Graduate: OK? allows students and parents to check individual progress at any time and take appropriate action to fulfill requirements. Counselors, teachers, and administrators can see a summary view of student progress and group students by missing requirements to plan effective interventions.
 
 ## Quote from You ##
   > A quote from a spokesperson in your company.
+  > "Will I Graduate: OK? lets students take responsibility for meeting graduation requirements, allows teachers to provide additional support, and saves counselors time." Beth Johnson, Lead Developer at Will I Graduate
 
 ## How to Get Started ##
   > Describe how easy it is to get started.
+  > Just go to *website* to register, then just fill in your classes and test scores to see your progress! 
 
 ## Customer Quote ##
   > Provide a quote from a hypothetical customer that describes how they experienced the benefit.
+  > "Will I Graduate provided a fast, effective method for tracking my students' progress toward graduation. This tool allowed me to work smarter and add value to my school." - Bob Jones, Principal, Richard Sherman High School
 
 ## Closing and Call to Action ##
   > Wrap it up and give pointers where the reader should go next.
+  > Get started today at *website.com*
