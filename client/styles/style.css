@@ -1,0 +1,17 @@
+body {
+  margin: 0;
+  margin-top: 10px;
+  font-family: arial, sans-serif;
+}
+
+a {
+  color: #333;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+h1 {
+  font-style: italic;
+  margin-bottom: 10px;
+}
+

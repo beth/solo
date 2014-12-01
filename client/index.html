@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html ng-app='grad'>
+  <head>
+    <meta charset="utf-8" />
+    <title>Shortly</title>
+    <link rel="stylesheet" type="text/css" href="styles/style.css" />
+  </head>
+  <body>
+    <h1>HI</h1>
+
+    <!-- the ng-view directive is where our templates will be loaded into when naviagted to -->
+<!--     <div ng-view></div> -->
+
+    
+    <div id='studentInfo' ng-controller = "gradCtrl as info">
+      <h3>blah</h3>
+      <form name="infoForm" ng-submit='info()'>
+        <input type='text' ng-model='info.grade'>
+        <input type='text' ng-model='info.school'>
+        <button>submit</button>
+      </form>
+      <p>{{info.grade}}</p>
+      <!-- <a href="#/signup">Don't have an account? <strong>Signup</strong> ...</a> -->
+    </div>
+
+
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="app/services/services.js"></script>
+    <script src="app/app.js"></script>
+  </body>
+</html>
