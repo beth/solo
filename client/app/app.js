@@ -20,9 +20,21 @@ angular.module('grad', [])
     this.completed = false;
   };
 
+  Course.prototype.isComplete = function(){
+    var credits = 0;
+    if(this.semesters[0].credit)
+      credits = credits + 0.5;
+    if(this.semesters[1].credit)
+      credits = credits + 0.5;
+    if(credits === this.creditsRequired){
+      this.completed = true;
+    }
+  };
+
   this.GPA = {
     creditsHours: 0,
     points: 0};
+
 
   this.courseOptions = [
     {
@@ -37,8 +49,18 @@ angular.module('grad', [])
         new Course('AP Statistics', false),
         new Course('Other', false)],
       otherCourses: [],
+      requirementsMet: false,
       checkRequirements: function(){
-        return false;
+        //just need three credits of math
+        var credits = 0;
+        for(var i = 0; i<this.courses.length; i++){
+          if(this.courses[i].completed){
+            credits = credits + 1;
+          }
+        }
+        if(credits>=1){
+          this.requirementsMet = true;
+        }
       }
     },
     {
@@ -49,6 +71,7 @@ angular.module('grad', [])
         new Course('Physics', true),
         new Course('Other', false)],
       otherCourses: [],
+      requirementsMet: false,
       checkRequirements: function(){
         return false;
       }
@@ -61,6 +84,7 @@ angular.module('grad', [])
         new Course('English III', true),
         new Course('English IV', true)],
       otherCourses: [],
+      requirementsMet: false,
       checkRequirements: function(){
           return false;
         }
@@ -73,6 +97,7 @@ angular.module('grad', [])
         new Course('Oklahoma History', true, 0.5),
         new Course('Other', false)],
       otherCourses: [],
+      requirementsMet: false,
       checkRequirements: function(){
         return false;
       }
@@ -85,6 +110,7 @@ angular.module('grad', [])
         new Course('Drama', false),
         new Course('Speech', false)],
       otherCourses: [],
+      requirementsMet: false,
       checkRequirements: function(){
         return false;
       }
@@ -103,6 +129,7 @@ angular.module('grad', [])
         new Course('Computer Tech I', false),
         new Course('Computer Tech II', false)],
       otherCourses: [],
+      requirementsMet: false,
       checkRequirements: function(){
         return false;
       }
@@ -112,8 +139,9 @@ angular.module('grad', [])
       courses: [
         new Course('Other', false)],
       otherCourses: [],
+      requirementsMet: false,
       checkRequirements: function(){
-
+        return false;
       }
     },
   ];
@@ -176,6 +204,14 @@ angular.module('grad', [])
   this.creditRequirementsMet = false;
 
 
+  this.courseRequirementsMet = function(){
+    var str = "";
+    for(var i = 0; i<this.courseOptions.length; i++){
+      str += this.courseOptions[i].name + " " + this.courseOptions[i].requirementsMet + " ";
+    }
+    this.consoleLog = str;
+  }
+
   this.eoiRequirementsMet = false;
   this.eoiRequirements = function(){
     var countPassed = 0;
@@ -198,15 +234,12 @@ angular.module('grad', [])
     //Default is to overwrite
     var subjectArea = this.subjectSelected;
    
-    this.consoleLog = "in add Course";
     if(this.courseSelected.name === 'Other'){
       var courseName = this.courseName;
       //Check to see if this course is already in the other class list
-      this.consoleLog = "in selected Other";
       var otherCourse = _.find(subjectArea.otherCourses, function(course){return course.name === courseName});
       //if course is not already in the other class list, make class 
       if(otherCourse === undefined){
-        this.consoleLog = "did not find other course";
         otherCourse = new Course(courseName, false);
         subjectArea.otherCourses.push(otherCourse);
       }
@@ -215,7 +248,7 @@ angular.module('grad', [])
           otherCourse.semesters[this.semesterSelected-1].credit = true;
         }
       otherCourse.semesters[this.semesterSelected-1].grade = this.gradeSelected.name;
-      this.consoleLog = "WHAR" + this.gradeSelected.name;
+      otherCourse.isComplete();
     }else{
       // var courseName = this.courseSelected.name;
       // var modCourse = _.find(subjectArea.courses, function(course){return course.name === courseName});
@@ -229,8 +262,11 @@ angular.module('grad', [])
           this.courseSelected.semesters[this.semesterSelected-1].credit = true;
         }
       this.courseSelected.semesters[this.semesterSelected-1].grade = this.gradeSelected.name;
+      this.courseSelected.isComplete();
     }
-    
+    //update requirements
+    subjectArea.checkRequirements();
+    this.courseRequirementsMet();
     //Clear input values
     this.subjectSelected = "";
     this.courseSelected = "";
