@@ -4,8 +4,15 @@
     <meta charset="utf-8" />
     <title>Shortly</title>
     <link rel="stylesheet" type="text/css" href="styles/style.css" />
+    <link rel="stylesheet" type="text/css" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
   </head>
   <body>
+
+<!--     <div class="row">
+        <div class="col-sm-4"><progressbar value="55"></progressbar></div>
+        <div class="col-sm-4"><progressbar class="progress-striped" value="22" type="warning">22%</progressbar></div>
+        <div class="col-sm-4"><progressbar class="progress-striped active" max="200" value="166" type="danger"><i>166 / 200</i></progressbar></div>
+    </div> -->
     <h1>Add Courses</h1>
 
     <!-- the ng-view directive is where our templates will be loaded into when naviagted to -->
@@ -18,7 +25,7 @@
         </select>
         <select data-ng-options="course as course.name for course in info.subjectSelected.courses" ng-model="info.courseSelected" required>
         </select>
-        <select data-ng-options="semester for semester in info.semesterOptions" ng-model="info.semesterSelected" required>
+        <select data-ng-options="semester as semester for semester in info.semesterOptions" ng-model="info.semesterSelected" required>
         </select>
         <select data-ng-options="grade as grade.name for grade in info.gradeOptions" ng-model="info.gradeSelected" required>
         </select>
@@ -37,11 +44,26 @@
         <button ng-show="testForm.$valid">add test</button>
       </form>
       <br>
-      <h1>EOI Requirements Met: {{info.eoiRequirementsMet}} Testing Requirements Met: {{info.creditRequirementsMet}}</h1>
+      <h1>EOI Requirements Met: {{info.eoiRequirementsMet}} </h1>
+      <h1>Course Requirements Met: {{info.creditRequirementsMet}}</h1>
       <div id = 'creditsInfo'>
  <!--        <span ng-repeat="(subjectArea, courses) in info.courseOptions"> -->
         <span ng-repeat="subjectArea in info.courseOptions">
           <b>{{subjectArea.name}}  : {{subjectArea.requirementsMet}}</b></br>
+          <!-- <span ng-repeat="course in courses | orderBy:'course.course'">{{course.semester}}-{{course.course}}  ({{course.grade.name}})<br></span> -->
+        </span>
+      </div>
+      <div id = 'class'>
+ <!--        <span ng-repeat="(subjectArea, courses) in info.courseOptions"> -->
+        <span ng-repeat="subjectArea in info.courseOptions">
+          <b>{{subjectArea.name}}</b></br>
+          <span ng-repeat="course in subjectArea.courses">
+            {{course}} <br>
+          </span>
+          Other Courses<br>
+          <span ng-repeat="course in subjectArea.otherCourses">
+            {{course}}</br>
+          </span>
           <!-- <span ng-repeat="course in courses | orderBy:'course.course'">{{course.semester}}-{{course.course}}  ({{course.grade.name}})<br></span> -->
         </span>
       </div>
@@ -53,6 +75,7 @@
 
 
     <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/underscore/underscore-min.js"></script>
     <script src="app/services/services.js"></script>

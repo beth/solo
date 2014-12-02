@@ -1,4 +1,4 @@
-angular.module('grad', [])
+angular.module('grad', ['ui.bootstrap'])
 .controller('gradCtrl', function(){
   //TODO:
   //[x] Make drop downs for EOI 
@@ -58,7 +58,7 @@ angular.module('grad', [])
             credits = credits + 1;
           }
         }
-        if(credits>=1){
+        if(credits>=0){
           this.requirementsMet = true;
         }
       }
@@ -73,7 +73,15 @@ angular.module('grad', [])
       otherCourses: [],
       requirementsMet: false,
       checkRequirements: function(){
-        return false;
+        var credits = 0;
+        for(var i = 0; i<this.courses.length; i++){
+          if(this.courses[i].completed){
+            credits = credits + 1;
+          }
+        }
+        if(credits>=0){
+          this.requirementsMet = true;
+        }
       }
     },
     {
@@ -86,8 +94,16 @@ angular.module('grad', [])
       otherCourses: [],
       requirementsMet: false,
       checkRequirements: function(){
-          return false;
+        var credits = 0;
+        for(var i = 0; i<this.courses.length; i++){
+          if(this.courses[i].completed){
+            credits = credits + 1;
+          }
         }
+        if(credits>=0){
+          this.requirementsMet = true;
+        }
+      }
     },
     {
       name: "History and Citizenship Skills", 
@@ -99,7 +115,15 @@ angular.module('grad', [])
       otherCourses: [],
       requirementsMet: false,
       checkRequirements: function(){
-        return false;
+       var credits = 0;
+        for(var i = 0; i<this.courses.length; i++){
+          if(this.courses[i].completed){
+            credits = credits + 1;
+          }
+        }
+        if(credits>=0){
+          this.requirementsMet = true;
+        }
       }
     },
     {
@@ -112,7 +136,15 @@ angular.module('grad', [])
       otherCourses: [],
       requirementsMet: false,
       checkRequirements: function(){
-        return false;
+        var credits = 0;
+        for(var i = 0; i<this.courses.length; i++){
+          if(this.courses[i].completed){
+            credits = credits + 1;
+          }
+        }
+        if(credits>=0){
+          this.requirementsMet = true;
+        }
       }
     },
     {
@@ -131,7 +163,15 @@ angular.module('grad', [])
       otherCourses: [],
       requirementsMet: false,
       checkRequirements: function(){
-        return false;
+        var credits = 0;
+        for(var i = 0; i<this.courses.length; i++){
+          if(this.courses[i].completed){
+            credits = credits + 1;
+          }
+        }
+        if(credits>=0){
+          this.requirementsMet = true;
+        }
       }
     },
     {
@@ -141,7 +181,15 @@ angular.module('grad', [])
       otherCourses: [],
       requirementsMet: false,
       checkRequirements: function(){
-        return false;
+      var credits = 0;
+        for(var i = 0; i<this.otherCourses.length; i++){
+          if(this.otherCourses[i].completed){
+            credits = credits + 1;
+          }
+        }
+        if(credits>=1){
+          this.requirementsMet = true;
+        }
       }
     },
   ];
@@ -205,11 +253,11 @@ angular.module('grad', [])
 
 
   this.courseRequirementsMet = function(){
-    var str = "";
+    var met = true;
     for(var i = 0; i<this.courseOptions.length; i++){
-      str += this.courseOptions[i].name + " " + this.courseOptions[i].requirementsMet + " ";
+      met = met && this.courseOptions[i].requirementsMet;
     }
-    this.consoleLog = str;
+    this.creditRequirementsMet = met;
   }
 
   this.eoiRequirementsMet = false;
