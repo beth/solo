@@ -23,13 +23,13 @@
         <select data-ng-options="grade as grade.name for grade in info.gradeOptions" ng-model="info.gradeSelected" required>
         </select>
         <input type='text' ng-model='info.courseName' ng-show="info.courseSelected==='Other'" ng-required="info.courseSelected==='Other'">
-        <button>add class</button>
+        <button ng-show="infoForm.$valid">add class</button>
       </form>
       <br>
       <div id = 'creditsInfo'>
         <span ng-repeat="(subjectArea, courses) in info.courseList">
           <b>{{subjectArea}}</b></br>
-          <span ng-repeat="course in courses | orderBy:'course.course'">{{course.semester}}  {{course.course}}  {{course.grade.name}}<br></span>
+          <span ng-repeat="course in courses | orderBy:'course.course'">{{course.semester}}-{{course.course}}  ({{course.grade.name}})<br></span>
         </span>
       </div>
       <!-- <a href="#/signup">Don't have an account? <strong>Signup</strong> ...</a> -->

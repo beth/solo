@@ -2,7 +2,7 @@ angular.module('grad', [])
 .controller('gradCtrl', function(){
 
   this.subjectOptions = [
-    {name: "none selected", value: []},
+    {name: "Select Subject Area", value: []},
     {name: "Mathematics", value: ['Algebra I', 'Algebra II', 'Geometry', 'Trigonometry', 'Math Analysis', 'Calculus', 'AP Statistics', 'Other']},
     {name: "Laboratory Science", value: ['Biology', 'Chemistry', 'Physics', 'Other']},
     {name: "English", value: ['English I', 'English II', 'English III', 'English IV']},
@@ -37,11 +37,20 @@ angular.module('grad', [])
   };
 
   this.addCourse = function(){
+    if(this.courseSelected === 'Other'){
+      this.courseSelected = this.subjectSelected.name + ": " + this.courseName;
+      this.subjectSelected.name = 'Electives';
+    }
     this.courseList[this.subjectSelected.name].push({
-      course: this.courseSelected==="Other" ? this.courseName : this.courseSelected,
+      course: this.courseSelected,
       semester: this.semesterSelected,
       grade: this.gradeSelected,
     });
+    this.subjectSelected = this.subjectOptions[0];
+    this.courseSelected = "";
+    this.semesterSelected = "";
+    this.gradeSelected = "";
+    this.courseTitle = "";
   };
 });
 // 
