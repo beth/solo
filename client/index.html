@@ -14,9 +14,9 @@
     
     <div id='studentInfo' ng-controller = "gradCtrl as info">
       <form name="gradesForm" ng-submit='info.addCourse()'>
-        <select data-ng-options="option as option.name for option in info.subjectOptions" ng-model="info.subjectSelected" required>
+        <select data-ng-options="option as option.name for option in info.courseOptions" ng-model="info.subjectSelected" required>
         </select>
-        <select data-ng-options="class as class for class in info.subjectSelected.value" ng-model="info.courseSelected" required>
+        <select data-ng-options="course as course.name for course in info.subjectSelected.courses" ng-model="info.courseSelected" required>
         </select>
         <select data-ng-options="semester for semester in info.semesterOptions" ng-model="info.semesterSelected" required>
         </select>
@@ -25,7 +25,7 @@
         <input type='text' ng-model='info.courseName' ng-show="info.needInputBox()" ng-required="info.courseSelected==='Other'" value = "Enter course title  ">
         <button ng-show="gradesForm.$valid">add class</button>
       </form>
-      <span>{{info.subjectSelected.value}}</span>
+      <span>{{info.subjectSelected}}</span>
       <br>
       <h2>Test Information</h2>
        <form name="testForm" ng-submit='info.addTest()'>

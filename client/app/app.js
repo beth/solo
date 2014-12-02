@@ -10,19 +10,123 @@ angular.module('grad', [])
   //[ ] Make log in
   //[ ] Make administrator view 
 
-  this.subjectOptions = [
-    {name: "Select Subject Area", value: []},
-    {name: "Mathematics", value: ['Algebra I', 'Algebra II', 'Geometry', 'Trigonometry', 'Math Analysis', 'Calculus', 'AP Statistics', 'Other']},
-    {name: "Laboratory Science", value: ['Biology', 'Chemistry', 'Physics', 'Other']},
-    {name: "English", value: ['English I', 'English II', 'English III', 'English IV']},
-    {name: "History and Citizenship Skills", value: ['United States History', 'United States Government', 'Oklahoma History', 'Other']},
-    {name: "Fine Arts or Speech", value: ['Music', 'Art', 'Drama', 'Speech']},
-    {name: "Foreign Language",  value: ['Input Class Name']},
-    {name: "Computer Technology", value: ['Input Class Name']},
-    {name: "Electives", value: ['Input Class Name']},
+  //Have array with subject requirements, different data structure for each array? 
+  var Course = function(courseTitle, reqForGraduation, creditsRequired){
+    this.name = courseTitle;
+    this.semesters = [{credit: false, grade: 'NA'}, {credit: false, grade: 'NA'}];
+    this.requiredCourse = reqForGraduation;
+    this.creditsRequired = creditsRequired || 1;
+    this.completed = false;
+  };
+
+  this.courseOptions = [
+    {
+      name: "Mathematics", 
+      courses: [
+        new Course('Algebra I', false), 
+        new Course('Algebra II', false), 
+        new Course('Geometry', false), 
+        new Course('Trigonometry', false), 
+        new Course('Math Analysis', false), 
+        new Course('Calculus', false),
+        new Course('AP Statistics', false),
+        new Course('Other', false)],
+      otherCourses: [],
+      checkRequirements: function(){
+        return false;
+      }
+    },
+    {
+      name: "Laboratory Science",
+      courses: [
+        new Course('Biology', true),
+        new Course('Chemistry', true),
+        new Course('Physics', true),
+        new Course('Other', false)],
+      otherCourses: [],
+      checkRequirements: function(){
+        return false;
+      }
+    },
+    {
+      name: "English", 
+      courses: [
+        new Course('English I', true),
+        new Course('English II', true),
+        new Course('English III', true),
+        new Course('English IV', true)],
+      otherCourses: [],
+      checkRequirements: function(){
+          return false;
+        }
+    },
+    {
+      name: "History and Citizenship Skills", 
+      courses: [
+        new Course('United States History', true),
+        new Course('United States Government', true, 0.5),
+        new Course('Oklahoma History', true, 0.5),
+        new Course('Other', false)],
+      otherCourses: [],
+      checkRequirements: function(){
+        return false;
+      }
+    },
+    {
+      name: "Fine Arts or Speech", 
+      courses: [
+        new Course('Music', false),
+        new Course('Art', false),
+        new Course('Drama', false),
+        new Course('Speech', false)],
+      otherCourses: [],
+      checkRequirements: function(){
+        return false;
+      }
+    },
+    {
+      name: "Foreign Language or Computer Technology",
+      courses: [
+        new Course('Spanish I', false),
+        new Course('Spanish II', false),
+        new Course('Spanish III', false),
+        new Course('Spanish IV', false),
+        new Course('French I', false),
+        new Course('French II', false),
+        new Course('French III', false),
+        new Course('French IV', false),
+        new Course('Computer Tech I', false),
+        new Course('Computer Tech II', false)],
+      otherCourses: [],
+      checkRequirements: function(){
+        return false;
+      }
+    },
+    {
+      name: "Electives", 
+      courses: [
+        new Course('Other', false)],
+      otherCourses: [],
+      checkRequirements: function(){
+
+      }
+    },
   ];
 
-  this.semesterOptions = ['Semester 1', 'Semester 2'];
+
+  // this.subjectOptions = [
+  //   {name: "Select Subject Area", value: []},
+  //   {name: "Mathematics", value: ['Algebra I', 'Algebra II', 'Geometry', 'Trigonometry', 'Math Analysis', 'Calculus', 'AP Statistics', 'Other']},
+  //   {name: "Laboratory Science", value: ['Biology', 'Chemistry', 'Physics', 'Other']},
+  //   {name: "English", value: ['English I', 'English II', 'English III', 'English IV']},
+  //   {name: "History and Citizenship Skills", value: ['United States History', 'United States Government', 'Oklahoma History', 'Other']},
+  //   {name: "Fine Arts or Speech", value: ['Music', 'Art', 'Drama', 'Speech']},
+  //   {name: "Foreign Language",  value: ['Input Class Name']},
+  //   {name: "Computer Technology", value: ['Input Class Name']},
+  //   {name: "Electives", value: ['Input Class Name']},
+  // ];
+
+  this.semesterOptions = ['1', '2'];
 
   this.gradeOptions = [
     {name: 'A', value: 4, credits: 0.5}, 
@@ -32,7 +136,7 @@ angular.module('grad', [])
     {name: 'F', value: 0, credits: 0.5},
     {name: 'IP', value: 0, credits: 0}];
 
-  this.subjectSelected = this.subjectOptions[0];
+  this.subjectSelected = "";
   this.needInputBox = function(){
     return (this.courseSelected === "Other" || this.courseSelected === "Input Class Name");
   }
@@ -119,7 +223,6 @@ angular.module('grad', [])
         this.courseSelected = this.courseName;
     }
     
-
     this.courseList[this.subjectSelected.name].push({
       course: this.courseSelected,
       semester: this.semesterSelected,
