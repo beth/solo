@@ -6,15 +6,14 @@
     <link rel="stylesheet" type="text/css" href="styles/style.css" />
   </head>
   <body>
-    <h1>HI</h1>
+    <h1>Add Courses</h1>
 
     <!-- the ng-view directive is where our templates will be loaded into when naviagted to -->
     <!--     <div ng-view></div> -->
 
     
     <div id='studentInfo' ng-controller = "gradCtrl as info">
-      <h3>blah</h3>
-      <form name="infoForm" ng-submit='gradCtrl.addCourse()'>
+      <form name="infoForm" ng-submit='info.addCourse()'>
         <select data-ng-options="option as option.name for option in info.subjectOptions" ng-model="info.subjectSelected" required>
         </select>
         <select data-ng-options="class as class for class in info.subjectSelected.value" ng-model="info.courseSelected" required>
@@ -23,10 +22,16 @@
         </select>
         <select data-ng-options="grade as grade.name for grade in info.gradeOptions" ng-model="info.gradeSelected" required>
         </select>
-        <input type='text' ng-model='info.courseName' ng-show="info.classSelected==='Other'" required>
+        <input type='text' ng-model='info.courseName' ng-show="info.courseSelected==='Other'" ng-required="info.courseSelected==='Other'">
         <button>add class</button>
       </form>
-      <p>{{info.subjectSelected}}</p>
+      <br>
+      <div id = 'creditsInfo'>
+        <span ng-repeat="(subjectArea, courses) in info.courseList">
+          <b>{{subjectArea}}</b></br>
+          <span ng-repeat="course in courses | orderBy:'course.course'">{{course.semester}}  {{course.course}}  {{course.grade.name}}<br></span>
+        </span>
+      </div>
       <!-- <a href="#/signup">Don't have an account? <strong>Signup</strong> ...</a> -->
     </div>
 

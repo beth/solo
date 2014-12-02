@@ -35,6 +35,14 @@ angular.module('grad', [])
     "Fine Arts or Speech": [],
     "Electives":[],
   };
+
+  this.addCourse = function(){
+    this.courseList[this.subjectSelected.name].push({
+      course: this.courseSelected==="Other" ? this.courseName : this.courseSelected,
+      semester: this.semesterSelected,
+      grade: this.gradeSelected,
+    });
+  };
 });
 // 
 
