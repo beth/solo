@@ -9,6 +9,7 @@ angular.module('grad', [])
   //[ ] Make progress bars
   //[ ] Make log in
   //[ ] Make administrator view 
+  //this commit: fixes bug with class name text input
 
   //Have array with subject requirements, different data structure for each array? 
   var Course = function(courseTitle, reqForGraduation, creditsRequired){
@@ -18,6 +19,10 @@ angular.module('grad', [])
     this.creditsRequired = creditsRequired || 1;
     this.completed = false;
   };
+
+  this.GPA = {
+    creditsHours: 0,
+    points: 0};
 
   this.courseOptions = [
     {
@@ -113,20 +118,7 @@ angular.module('grad', [])
     },
   ];
 
-
-  // this.subjectOptions = [
-  //   {name: "Select Subject Area", value: []},
-  //   {name: "Mathematics", value: ['Algebra I', 'Algebra II', 'Geometry', 'Trigonometry', 'Math Analysis', 'Calculus', 'AP Statistics', 'Other']},
-  //   {name: "Laboratory Science", value: ['Biology', 'Chemistry', 'Physics', 'Other']},
-  //   {name: "English", value: ['English I', 'English II', 'English III', 'English IV']},
-  //   {name: "History and Citizenship Skills", value: ['United States History', 'United States Government', 'Oklahoma History', 'Other']},
-  //   {name: "Fine Arts or Speech", value: ['Music', 'Art', 'Drama', 'Speech']},
-  //   {name: "Foreign Language",  value: ['Input Class Name']},
-  //   {name: "Computer Technology", value: ['Input Class Name']},
-  //   {name: "Electives", value: ['Input Class Name']},
-  // ];
-
-  this.semesterOptions = ['1', '2'];
+  this.semesterOptions = [1, 2];
 
   this.gradeOptions = [
     {name: 'A', value: 4, credits: 0.5}, 
@@ -137,13 +129,19 @@ angular.module('grad', [])
     {name: 'IP', value: 0, credits: 0}];
 
   this.subjectSelected = "";
+  this.courseSelected = "";
+  this.semesterSelected = "";
+  this.gradeSelected = "";
+  this.courseName = "";
+
   this.needInputBox = function(){
-    return (this.courseSelected === "Other" || this.courseSelected === "Input Class Name");
+    if(this.courseSelected.hasOwnProperty('name')){
+      return (this.courseSelected.name === "Other");
+    }else
+      return false;
   }
-  // this.courseSelected = "";
-  // this.semesterSelected = "";
-  // this.gradeSelected = "";
-  // this.courseTitle = "";
+
+
 
   this.eoiTests = ['Algebra I', 'Algebra II', 'Geometry', 'English II', 'English III', 'Biology', 'United States History'];
 
@@ -176,25 +174,7 @@ angular.module('grad', [])
   }
  
   this.creditRequirementsMet = false;
-  this.percentMathRequirements = function(){
-    var courses = {};
-    var mathClasses = this.courseList["Mathematics"];
-    for(var k in mathClasses){
-      if(mathClasses[k].grade.value>0){
-        if(courses.hasOwnProperty(mathClasses[k].course))
-          courses[mathClasses[k]] += mathClasses[k].grade.credits;
-        else
-          courses[mathClasses[k]] = mathClasses[k].grade.credits;
-      }
-    }
-    var credits = 0;
-    for(var k in courses){
-      if(courses[k]>=1)
-        credits++;    
-    }
-    this.mathPercent = credits/3;
-    return credits/3;
-  };
+
 
   this.eoiRequirementsMet = false;
   this.eoiRequirements = function(){
@@ -212,24 +192,47 @@ angular.module('grad', [])
     this.eoiRequirementsMet = (requiredPassed && countPassed >=5);
     return (requiredPassed && countPassed >=5);
   };
-
+  this.consoleLog = "";
   this.addCourse = function(){
-    //TODO: IF DUPLCIATE, ASK ABOUT OVERWRITING?!
-    if(this.courseSelected === 'Other'){
-      console.log(this.subjectSelected.name);
-      this.courseSelected = this.subjectSelected.name + ": " + this.courseName;
-      this.subjectSelected.name = 'Electives';
-    }else if(this.courseSelected === 'Input Class Name'){
-        this.courseSelected = this.courseName;
+    //TODO: IF DUPLCIATE, CONFIRM OVERWRITE
+    //Default is to overwrite
+    var subjectArea = this.subjectSelected;
+   
+    this.consoleLog = "in add Course";
+    if(this.courseSelected.name === 'Other'){
+      var courseName = this.courseName;
+      //Check to see if this course is already in the other class list
+      this.consoleLog = "in selected Other";
+      var otherCourse = _.find(subjectArea.otherCourses, function(course){return course.name === courseName});
+      //if course is not already in the other class list, make class 
+      if(otherCourse === undefined){
+        this.consoleLog = "did not find other course";
+        otherCourse = new Course(courseName, false);
+        subjectArea.otherCourses.push(otherCourse);
+      }
+      //Now add credits if grade is high enough
+      if(this.gradeSelected.value > 0){
+          otherCourse.semesters[this.semesterSelected-1].credit = true;
+        }
+      otherCourse.semesters[this.semesterSelected-1].grade = this.gradeSelected.name;
+      this.consoleLog = "WHAR" + this.gradeSelected.name;
+    }else{
+      // var courseName = this.courseSelected.name;
+      // var modCourse = _.find(subjectArea.courses, function(course){return course.name === courseName});
+      // this.consoleLog = "IN ELSE " + modCourse;
+      // if(this.gradeSelected.value > 0){
+      //     modCourse.semesters[this.semesterSelected-1].credit = true;
+      //   }
+      // modCourse.semesters[this.semesterSelected-1].grade = this.gradeSelected.name;
+
+      if(this.gradeSelected.value > 0){
+          this.courseSelected.semesters[this.semesterSelected-1].credit = true;
+        }
+      this.courseSelected.semesters[this.semesterSelected-1].grade = this.gradeSelected.name;
     }
     
-    this.courseList[this.subjectSelected.name].push({
-      course: this.courseSelected,
-      semester: this.semesterSelected,
-      grade: this.gradeSelected,
-    });
-
-    this.subjectSelected = this.subjectOptions[0];
+    //Clear input values
+    this.subjectSelected = "";
     this.courseSelected = "";
     this.semesterSelected = "";
     this.gradeSelected = "";

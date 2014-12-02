@@ -22,10 +22,13 @@
         </select>
         <select data-ng-options="grade as grade.name for grade in info.gradeOptions" ng-model="info.gradeSelected" required>
         </select>
-        <input type='text' ng-model='info.courseName' ng-show="info.needInputBox()" ng-required="info.courseSelected==='Other'" value = "Enter course title  ">
+        <input type='text' ng-model='info.courseName' ng-show="info.needInputBox()" ng-required="info.needInputBox()" value = "Enter course title  ">
         <button ng-show="gradesForm.$valid">add class</button>
       </form>
+
       <span>{{info.subjectSelected}}</span>
+      <span>{{info.courseSelected}}</span>
+      <span>{{info.gradeSelected}}</span>
       <br>
       <h2>Test Information</h2>
        <form name="testForm" ng-submit='info.addTest()'>
@@ -42,12 +45,16 @@
         </span>
         <span>{{info.percentMathRequirements()}}</span>
       </div>
+    {{info.consoleLog}}  
+    <br>
+    {{info.courseOptions[0] | json}}
       <!-- <a href="#/signup">Don't have an account? <strong>Signup</strong> ...</a> -->
     </div>
 
 
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/underscore/underscore-min.js"></script>
     <script src="app/services/services.js"></script>
     <script src="app/app.js"></script>
   </body>
