@@ -9,17 +9,24 @@
     <h1>HI</h1>
 
     <!-- the ng-view directive is where our templates will be loaded into when naviagted to -->
-<!--     <div ng-view></div> -->
+    <!--     <div ng-view></div> -->
 
     
     <div id='studentInfo' ng-controller = "gradCtrl as info">
       <h3>blah</h3>
-      <form name="infoForm" ng-submit='info()'>
-        <input type='text' ng-model='info.grade'>
-        <input type='text' ng-model='info.school'>
-        <button>submit</button>
+      <form name="infoForm" ng-submit='gradCtrl.addCourse()'>
+        <select data-ng-options="option as option.name for option in info.subjectOptions" ng-model="info.subjectSelected" required>
+        </select>
+        <select data-ng-options="class as class for class in info.subjectSelected.value" ng-model="info.courseSelected" required>
+        </select>
+        <select data-ng-options="semester for semester in info.semesterOptions" ng-model="info.semesterSelected" required>
+        </select>
+        <select data-ng-options="grade as grade.name for grade in info.gradeOptions" ng-model="info.gradeSelected" required>
+        </select>
+        <input type='text' ng-model='info.courseName' ng-show="info.classSelected==='Other'" required>
+        <button>add class</button>
       </form>
-      <p>{{info.grade}}</p>
+      <p>{{info.subjectSelected}}</p>
       <!-- <a href="#/signup">Don't have an account? <strong>Signup</strong> ...</a> -->
     </div>
 
