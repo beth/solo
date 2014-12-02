@@ -22,16 +22,19 @@
         </select>
         <select data-ng-options="grade as grade.name for grade in info.gradeOptions" ng-model="info.gradeSelected" required>
         </select>
-        <input type='text' ng-model='info.courseName' ng-show="info.courseSelected ==='Other'" ng-required="info.courseSelected==='Other'">
+        <input type='text' ng-model='info.courseName' ng-show="info.needInputBox()" ng-required="info.courseSelected==='Other'" value = "Enter course title  ">
         <button ng-show="gradesForm.$valid">add class</button>
       </form>
+      <span>{{info.subjectSelected.value}}</span>
       <br>
+      <h2>Test Information</h2>
        <form name="testForm" ng-submit='info.addTest()'>
         <select data-ng-options="test for test in info.eoiTests" ng-model="info.eoiSelected" required></select>
         <select data-ng-options="score as score.name for score in info.eoiScoreOptions" ng-model="info.scoreSelected" required></select>
         <button ng-show="testForm.$valid">add test</button>
       </form>
       <br>
+      <h1>EOI Requirements Met: {{info.eoiRequirementsMet}} Testing Requirements Met: {{info.creditRequirementsMet}}</h1>
       <div id = 'creditsInfo'>
         <span ng-repeat="(subjectArea, courses) in info.courseList">
           <b>{{subjectArea}}</b></br>
