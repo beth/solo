@@ -64,6 +64,7 @@ angular.module('grad', [])
     "Electives":[]
   };
 
+
   this.testList = {};
   for(var i =0; i<this.eoiTests.length;i++){
     this.testList[this.eoiTests[i]] = {taken: 0,
@@ -133,9 +134,9 @@ angular.module('grad', [])
   };
 
   this.addTest= function(){
-    //TODO: IF DUPLCIATE, ASK ABOUT OVERWRITING?!
+    //Assuming Overwriting Duplicate Tests
     this.testList[this.eoiSelected].taken++;
-    this.testList[this.eoiSelected].passed = this.scoreSelected.value > 0;
+    this.testList[this.eoiSelected].passed = this.scoreSelected.value > 0 || this.testList[eoiSelected].passed;
     this.eoiSelected = "";
     this.scoreSelected = "";
     this.eoiRequirements(); 
