@@ -13,7 +13,7 @@
 
     
     <div id='studentInfo' ng-controller = "gradCtrl as info">
-      <form name="infoForm" ng-submit='info.addCourse()'>
+      <form name="gradesForm" ng-submit='info.addCourse()'>
         <select data-ng-options="option as option.name for option in info.subjectOptions" ng-model="info.subjectSelected" required>
         </select>
         <select data-ng-options="class as class for class in info.subjectSelected.value" ng-model="info.courseSelected" required>
@@ -22,8 +22,14 @@
         </select>
         <select data-ng-options="grade as grade.name for grade in info.gradeOptions" ng-model="info.gradeSelected" required>
         </select>
-        <input type='text' ng-model='info.courseName' ng-show="info.courseSelected==='Other'" ng-required="info.courseSelected==='Other'">
-        <button ng-show="infoForm.$valid">add class</button>
+        <input type='text' ng-model='info.courseName' ng-show="info.courseSelected ==='Other'" ng-required="info.courseSelected==='Other'">
+        <button ng-show="gradesForm.$valid">add class</button>
+      </form>
+      <br>
+       <form name="testForm" ng-submit='info.addTest()'>
+        <select data-ng-options="test for test in info.eoiTests" ng-model="info.eoiSelected" required></select>
+        <select data-ng-options="score as score.name for score in info.eoiScoreOptions" ng-model="info.scoreSelected" required></select>
+        <button ng-show="testForm.$valid">add test</button>
       </form>
       <br>
       <div id = 'creditsInfo'>
@@ -31,6 +37,7 @@
           <b>{{subjectArea}}</b></br>
           <span ng-repeat="course in courses | orderBy:'course.course'">{{course.semester}}-{{course.course}}  ({{course.grade.name}})<br></span>
         </span>
+        <span>{{info.percentMathRequirements()}}</span>
       </div>
       <!-- <a href="#/signup">Don't have an account? <strong>Signup</strong> ...</a> -->
     </div>

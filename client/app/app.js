@@ -1,5 +1,12 @@
 angular.module('grad', [])
 .controller('gradCtrl', function(){
+  //TODO:
+  //1. Make drop downs for EOI
+  //2. Make functions that evaluate progress for graduation
+  //3. Make information things that show alternatives
+  //4. Make progress bars
+  //5. Make log in
+  //6. Make administrator view 
 
   this.subjectOptions = [
     {name: "Select Subject Area", value: []},
@@ -22,10 +29,21 @@ angular.module('grad', [])
     {name: 'IP', value: 0, credits: 0}];
 
   this.subjectSelected = this.subjectOptions[0];
-  this.courseSelected = "";
-  this.semesterSelected = "";
-  this.gradeSelected = "";
-  this.courseTitle = "";
+  // this.courseSelected = "";
+  // this.semesterSelected = "";
+  // this.gradeSelected = "";
+  // this.courseTitle = "";
+
+  this.eoiTests = ['Algebra I', 'Algebra II', 'Geometry', 'English II', 'English III', 'Biology', 'United States History'];
+
+  this.eoiScoreOptions = [
+  {name: 'Proficient', value: 2},
+  {name: 'Satisfactory', value: 1},
+  {name: 'Limited Knowledge', value: 0},
+  {name: 'Unsatisfactory', value: -1}];
+
+  this.eoiSelected = "";
+  this.scoreSelected = "";
 
   this.courseList = {
     "Mathematics": [],
@@ -36,16 +54,39 @@ angular.module('grad', [])
     "Electives":[],
   };
 
+  this.percentMathRequirements = function(){
+    var courses = {};
+    var mathClasses = this.courseList["Mathematics"];
+    for(var k in mathClasses){
+      if(mathClasses[k].grade.value>0){
+        if(courses.hasOwnProperty(mathClasses[k].course))
+          courses[mathClasses[k]] += mathClasses[k].grade.credits;
+        else
+          courses[mathClasses[k]] = mathClasses[k].grade.credits;
+      }
+    }
+    var credits = 0;
+    for(var k in courses){
+      if(courses[k]>=1)
+        credits++;    
+    }
+    this.mathPercent = credits/3;
+    return credits/3;
+  };
+
   this.addCourse = function(){
+    //TODO: IF DUPLCIATE, ASK ABOUT OVERWRITING?!
     if(this.courseSelected === 'Other'){
       this.courseSelected = this.subjectSelected.name + ": " + this.courseName;
       this.subjectSelected.name = 'Electives';
     }
+
     this.courseList[this.subjectSelected.name].push({
       course: this.courseSelected,
       semester: this.semesterSelected,
       grade: this.gradeSelected,
     });
+
     this.subjectSelected = this.subjectOptions[0];
     this.courseSelected = "";
     this.semesterSelected = "";
