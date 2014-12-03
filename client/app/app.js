@@ -43,17 +43,19 @@ angular.module('grad', ['ui.bootstrap'])
   };
 
   this.GPA = {
-    creditHours: 0,
-    points: 0,
-    creditsEarned: 0
+    creditHours: 18.5,
+    points: 50,
+    creditsEarned: 18
   };
 
-  this.eoiProgress = 0;
-  this.creditProgress = 0;
+  this.eoiProgress = .01;
+  this.creditProgress = .01;
   this.gpaProgress = 0;
   this.eType = 'info';
   this.cType = 'info';
   this.gType = 'info';
+  this.creditMessage = "Not enough information";
+  this.eoiMessage = "No tests taken";
 
   this.progressType = function(val){
     var type;
@@ -81,6 +83,7 @@ angular.module('grad', ['ui.bootstrap'])
         new Course('Other', false)],
       otherCourses: [],
       requirementsMet: false,
+      requirementMessage: "3 credits needed",
       checkRequirements: function(){
         //just need three credits of math
         var credits = 0;
@@ -109,6 +112,7 @@ angular.module('grad', ['ui.bootstrap'])
         new Course('Other', false)],
       otherCourses: [],
       requirementsMet: false,
+      requirementMessage: "3 credits needed",
       checkRequirements: function(){
         var credits = 0;
         for(var i = 0; i<this.courses.length; i++){
@@ -137,6 +141,7 @@ angular.module('grad', ['ui.bootstrap'])
         new Course('English IV', true)],
       otherCourses: [],
       requirementsMet: false,
+      requirementMessage: "4 credits needed",
       checkRequirements: function(){
         var credits = 0;
         for(var i = 0; i<this.courses.length; i++){
@@ -165,6 +170,7 @@ angular.module('grad', ['ui.bootstrap'])
         new Course('Other', false)],
       otherCourses: [],
       requirementsMet: false,
+      requirementMessage: "3 credits needed (must include 1 US History, 0.5 OK History, 0.5 US Government)",
       checkRequirements: function(){
        var credits = 0;
         for(var i = 0; i<this.courses.length; i++){
@@ -193,6 +199,7 @@ angular.module('grad', ['ui.bootstrap'])
         new Course('Speech', false)],
       otherCourses: [],
       requirementsMet: false,
+      requirementMessage: "1 credit needed",
       checkRequirements: function(){
         var credits = 0;
         for(var i = 0; i<this.courses.length; i++){
@@ -227,6 +234,7 @@ angular.module('grad', ['ui.bootstrap'])
         new Course('Computer Tech II', false)],
       otherCourses: [],
       requirementsMet: false,
+      requirementMessage: "2 credits of same language (technology counts as language) needed",
       checkRequirements: function(){
         var credits = 0;
         for(var i = 0; i<this.courses.length; i++){
@@ -252,6 +260,7 @@ angular.module('grad', ['ui.bootstrap'])
         new Course('Other', false)],
       otherCourses: [],
       requirementsMet: false,
+      requirementMessage: "6 credits not used for other categories needed",
       checkRequirements: function(){
       var credits = 0;
         for(var i = 0; i<this.otherCourses.length; i++){
@@ -321,6 +330,7 @@ angular.module('grad', ['ui.bootstrap'])
       }
     }
     this.creditRequirementsMet = met;
+    this.courseMessage = metCount + " subject area requirements met"
     this.creditProgress = metCount/7*100;
     this.cType = this.progressType(this.creditProgress);
   }
@@ -347,7 +357,7 @@ angular.module('grad', ['ui.bootstrap'])
       totalPassed = countPassed - 2;
     }else
       totalPassed = countPassed + requiredPassed;
-
+    this.eoiMessage = totalPassed + " EOI tests passed";
     this.eoiProgress = totalPassed/5*100;
     this.eType = this.progressType(this.eoiProgress);
     this.eoiRequirementsMet = (requiredPassed && countPassed >=5);
@@ -389,6 +399,7 @@ angular.module('grad', ['ui.bootstrap'])
     if(this.gradeSelected.value>0){
       this.GPA.creditsEarned += this.gradeSelected.credits;
     }
+    this.updateGPA();
     //update requirements
     subjectArea.checkRequirements();
     this.courseRequirementsMet();
@@ -399,6 +410,17 @@ angular.module('grad', ['ui.bootstrap'])
     this.gradeSelected = "";
     this.courseName = "";
   };
+
+  this.updateGPA = function(){
+    this.overallGPA = this.GPA.points/this.GPA.creditHours;
+    this.gpaProgress = this.overallGPA/4*100;
+    if(this.overallGPA<1.5){
+      this.gType = 'danger';
+    }else if(this.overallGPA<2.5){
+      this.gType = 'warning';
+    }else
+      this.gType = 'success';
+  }
 
   this.addTest= function(){
     //Assuming Overwriting Duplicate Tests
@@ -420,6 +442,7 @@ angular.module('grad', ['ui.bootstrap'])
   this.courseOptions[6].courses = [{"name":"Other","semesters":[{"credit":false,"grade":"NA"},{"credit":false,"grade":"NA"}],"requiredCourse":false,"creditsRequired":1,"completed":false}];
   this.courseOptions[6].otherCourses = [{"name":"Music Appreciation","semesters":[{"credit":true,"grade":"A"},{"credit":true,"grade":"B"}],"requiredCourse":false,"creditsRequired":1,"completed":true},{"name":"Basketball","semesters":[{"credit":true,"grade":"B"},{"credit":true,"grade":"B"}],"requiredCourse":false,"creditsRequired":1,"completed":true},{"name":"Physical Education","semesters":[{"credit":true,"grade":"D"},{"credit":true,"grade":"B"}],"requiredCourse":false,"creditsRequired":1,"completed":true},{"name":"Culinary Arts I","semesters":[{"credit":true,"grade":"B"},{"credit":true,"grade":"C"}],"requiredCourse":false,"creditsRequired":1,"completed":true},{"name":"Culinary Arts II","semesters":[{"credit":true,"grade":"A"},{"credit":true,"grade":"C"}],"requiredCourse":false,"creditsRequired":1,"completed":true}];
   this.courseRequirementsMet();
+  this.updateGPA();
 });
 // 
 

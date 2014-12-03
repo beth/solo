@@ -39,23 +39,12 @@
   
   <!-- upper section -->
   <div class="row">
-  <div class="col-sm-4">
-      <!-- left -->
-<!--       <h3><i class="glyphicon glyphicon-briefcase"></i> Useful Links </h3>
-      <hr>
-      
-      <ul class="nav nav-stacked">
-        <li><a href="javascript:;"><i class="glyphicon glyphicon-flash"></i> OK.edu</a></li>
-        <li><a href="javascript:;"><i class="glyphicon glyphicon-link"></i> NHHS</a></li>
-        <li><a href="javascript:;"><i class="glyphicon glyphicon-link"></i>OK Promise</a></li>
-      </ul>
-      
-      <hr>
-       -->
+  <div class="col-sm-3">
+
 
         <div id='studentInfo'>
 
-      <h3>Add Courses</h3>
+      <h3><i class="glyphicon glyphicon-book"></i> Add Course </h3>  
       <form name="gradesForm" ng-submit='info.addCourse()'>
   
         <select data-ng-options="option as option.name for option in info.courseOptions" ng-model="info.subjectSelected" required>
@@ -76,7 +65,7 @@
       </form>
 
       <br>
-      <h3>Add EOI Scores</h3>
+      <h3><i class="glyphicon glyphicon-pencil"></i> Add EOI Test </h3> 
        <form name="testForm" ng-submit='info.addTest()'>
         Test: <select data-ng-options="test for test in info.eoiTests" ng-model="info.eoiSelected" required></select><br>
         Score: <select data-ng-options="score as score.name for score in info.eoiScoreOptions" ng-model="info.scoreSelected" required></select>
@@ -86,7 +75,7 @@
       <br>
     </div>
     </div><!-- /span-3 -->
-    <div class="col-sm-8">
+    <div class="col-sm-9">
         
       <!-- column 2 --> 
        <h3><i class="glyphicon glyphicon-dashboard"></i> Graduation Progress </h3>  
@@ -100,28 +89,11 @@
                   <div class="panel-body">
                     
                     EOI Requirements Met: {{info.eoiRequirementsMet}} <br>
-                    <progressbar class="progress-striped active" value="info.eoiProgress" type="{{info.eType}}"> EOI Requirements <i ng-show="showWarning">!!! Watch out !!!</i></progressbar>
+                    <progressbar class="progress-striped active" value="info.eoiProgress" type="{{info.eType}}"> {{info.eoiMessage}} </progressbar>
                     Course Requirements Met: {{info.creditRequirementsMet}}<br>
-                    <progressbar class="progress-striped active" value="info.creditProgress" type="{{info.cType}}"> Course Requirements <i ng-show="showWarning">!!! Watch out !!!</i></progressbar>
-
-                   <!--  <small>Complete</small>
-                    <div class="progress">
-                      <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100" style="width: 72%">
-                        <span class="sr-only">72% Complete</span>
-                      </div>
-                    </div>
-                    <small>In Progress</small>
-                    <div class="progress">
-                      <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                        <span class="sr-only">20% Complete</span>
-                      </div>
-                    </div>
-                    <small>At Risk</small>
-                    <div class="progress">
-                      <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-                        <span class="sr-only">80% Complete</span>
-                      </div>
-                    </div> -->
+                    <progressbar class="progress-striped active" value="info.creditProgress" type="{{info.cType}}"> {{info.courseMessage}}</progressbar>
+                    GPA:<br>
+                    <progressbar class="progress-striped active" value="info.gpaProgress" type="{{info.gType}}"> {{info.overallGPA | number: 2}} </progressbar>
 
                   </div><!--/panel-body-->
               </div><!--/panel-->                     
@@ -143,7 +115,7 @@
     <div class="col-md-12">
       <hr>
       <div id = 'courseList' ng-repeat="subjectArea in info.courseOptions">
-      <h3>{{subjectArea.name}}</h3>
+      <h4>{{subjectArea.name}}</h4>
         <table class="table table-striped">
           <thead>
             <tr><th>Course Name</th><th>Semester 1</th><th>Semester 2</th><th>Complete</th></tr>
@@ -157,14 +129,10 @@
             <tbody ng-repeat="course in subjectArea.otherCourses" ng-show="course.semesters[0].credit || course.semesters[1].credit">
             <tr><td>{{course.name}}</td><td>{{course.semesters[0].grade}}</td><td>{{course.semesters[1].grade}}</td><td> {{course.completed}}</td></tr>
             </tbody>
+            <span class="myWarningMessage" ng-hide="subjectArea.requirementsMet">{{subjectArea.requirementMessage}}<span>
           </div>
         </table>
       </div>
-
-
-      <span ng-show="info.GPA.creditHours>0">{{info.GPA.points/info.GPA.creditHours}}</span>
-      
-    
       <hr>              
 
     </div>
@@ -182,7 +150,7 @@
 </div><!--/container-->
 <!-- /Main -->
 
-{{info.courseOptions}}
+
 <footer class="text-center">This Bootstrap 3 dashboard layout is compliments of <a href="http://www.bootply.com/85850"><strong>Bootply.com</strong></a></footer>
 
 
