@@ -5,22 +5,15 @@
     <title>Shortly</title>
     <link rel="stylesheet" type="text/css" href="styles/style.css" />
     <link rel="stylesheet" type="text/css" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+
   </head>
   <body>
-
-<!--     <div class="row">
-        <div class="col-sm-4"><progressbar value="55"></progressbar></div>
-        <div class="col-sm-4"><progressbar class="progress-striped" value="22" type="warning">22%</progressbar></div>
-        <div class="col-sm-4"><progressbar class="progress-striped active" max="200" value="166" type="danger"><i>166 / 200</i></progressbar></div>
-    </div> -->
-    <h1>Add Courses</h1>
-
-    <!-- the ng-view directive is where our templates will be loaded into when naviagted to -->
-    <!--     <div ng-view></div> -->
-
     
     <div id='studentInfo' ng-controller = "gradCtrl as info">
+
+      <h2>Add Courses</h2>
       <form name="gradesForm" ng-submit='info.addCourse()'>
+  
         <select data-ng-options="option as option.name for option in info.courseOptions" ng-model="info.subjectSelected" required>
         </select>
         <select data-ng-options="course as course.name for course in info.subjectSelected.courses" ng-model="info.courseSelected" required>
@@ -33,44 +26,37 @@
         <button ng-show="gradesForm.$valid">add class</button>
       </form>
 
-<!--       <span>{{info.subjectSelected}}</span>
-      <span>{{info.courseSelected}}</span>
-      <span>{{info.gradeSelectedss}}</span> -->
       <br>
-      <h2>Test Information</h2>
+      <h2>Add EOI Scores</h2>
        <form name="testForm" ng-submit='info.addTest()'>
         <select data-ng-options="test for test in info.eoiTests" ng-model="info.eoiSelected" required></select>
         <select data-ng-options="score as score.name for score in info.eoiScoreOptions" ng-model="info.scoreSelected" required></select>
         <button ng-show="testForm.$valid">add test</button>
       </form>
       <br>
-      <h1>EOI Requirements Met: {{info.eoiRequirementsMet}} </h1>
-      <h1>Course Requirements Met: {{info.creditRequirementsMet}}</h1>
+      <h1 >EOI Requirements Met: {{info.eoiRequirementsMet}} </h1>
+      <progressbar class="progress-striped active" value="info.eoiProgress" type="{{info.eType}}"> EOI Requirements <i ng-show="showWarning">!!! Watch out !!!</i></progressbar>
+      <h1 >Course Requirements Met: {{info.creditRequirementsMet}}</h1>
+      <progressbar class="progress-striped active" value="info.creditProgress" type="{{info.cType}}"> Course Requirements <i ng-show="showWarning">!!! Watch out !!!</i></progressbar>
       <div id = 'creditsInfo'>
- <!--        <span ng-repeat="(subjectArea, courses) in info.courseOptions"> -->
         <span ng-repeat="subjectArea in info.courseOptions">
           <b>{{subjectArea.name}}  : {{subjectArea.requirementsMet}}</b></br>
-          <!-- <span ng-repeat="course in courses | orderBy:'course.course'">{{course.semester}}-{{course.course}}  ({{course.grade.name}})<br></span> -->
         </span>
       </div>
       <div id = 'class'>
- <!--        <span ng-repeat="(subjectArea, courses) in info.courseOptions"> -->
         <span ng-repeat="subjectArea in info.courseOptions">
           <b>{{subjectArea.name}}</b></br>
           <span ng-repeat="course in subjectArea.courses">
-            {{course}} <br>
+            <span ng-show="course.semesters[0].credit || course.semesters[1].credit">{{course.name}} Semester 1: {{course.semesters[0].grade}} Semester 2: {{course.semesters[1].grade}}   {{course.completed}}<br> </span> 
           </span>
-          Other Courses<br>
+          <span ng-show="subjectArea.otherCourses.length>0">Other Courses<br></span>
           <span ng-repeat="course in subjectArea.otherCourses">
-            {{course}}</br>
+            {{course.name}} Semester 1: {{course.semesters[0].grade}} Semester 2: {{course.semesters[1].grade}} {{course.completed}}
           </span>
-          <!-- <span ng-repeat="course in courses | orderBy:'course.course'">{{course.semester}}-{{course.course}}  ({{course.grade.name}})<br></span> -->
         </span>
       </div>
-    <!-- {{info.courseRequirementsMet()}} -->
-    <!-- {{info.consoleLog}}   -->
+      <span ng-show="info.GPA.creditHours>0">{{info.GPA.points/info.GPA.creditHours}}</span>
     <br>
-      <!-- <a href="#/signup">Don't have an account? <strong>Signup</strong> ...</a> -->
     </div>
 
 

@@ -12,6 +12,7 @@ angular.module('grad', ['ui.bootstrap'])
   //this commit: fixes bug with class name text input
 
   //Have array with subject requirements, different data structure for each array? 
+
   var Course = function(courseTitle, reqForGraduation, creditsRequired){
     this.name = courseTitle;
     this.semesters = [{credit: false, grade: 'NA'}, {credit: false, grade: 'NA'}];
@@ -20,21 +21,51 @@ angular.module('grad', ['ui.bootstrap'])
     this.completed = false;
   };
 
-  Course.prototype.isComplete = function(){
+  // Course.prototype.isComplete = function(){
+  //   var credits = 0;
+  //   if(this.semesters[0].credit)
+  //     credits = credits + 0.5;
+  //   if(this.semesters[1].credit)
+  //     credits = credits + 0.5;
+  //   if(credits === this.creditsRequired){
+  //     this.completed = true;
+  //   }
+  // };
+  this.isCourseComplete = function(course){
     var credits = 0;
-    if(this.semesters[0].credit)
+    if(course.semesters[0].credit)
       credits = credits + 0.5;
-    if(this.semesters[1].credit)
+    if(course.semesters[1].credit)
       credits = credits + 0.5;
-    if(credits === this.creditsRequired){
-      this.completed = true;
+    if(credits === course.creditsRequired){
+      course.completed = true;
     }
   };
 
   this.GPA = {
-    creditsHours: 0,
-    points: 0};
+    creditHours: 0,
+    points: 0,
+    creditsEarned: 0
+  };
 
+  this.eoiProgress = 0;
+  this.creditProgress = 0;
+  this.gpaProgress = 0;
+  this.eType = 'info';
+  this.cType = 'info';
+  this.gType = 'info';
+
+  this.progressType = function(val){
+    var type;
+     if (val < 60) {
+      type = 'danger';
+    } else if (val < 99) {
+      type = 'warning';
+    } else
+      type = 'success';
+ 
+  return type;
+  }
 
   this.courseOptions = [
     {
@@ -58,7 +89,13 @@ angular.module('grad', ['ui.bootstrap'])
             credits = credits + 1;
           }
         }
-        if(credits>=0){
+        for(var i = 0; i<this.otherCourses.length; i++){
+          if(this.otherCourses[i].completed){
+            credits = credits + 1;
+          }
+        }
+
+        if(credits>=3){
           this.requirementsMet = true;
         }
       }
@@ -79,7 +116,14 @@ angular.module('grad', ['ui.bootstrap'])
             credits = credits + 1;
           }
         }
-        if(credits>=0){
+
+        for(var i = 0; i<this.otherCourses.length; i++){
+          if(this.otherCourses[i].completed){
+            credits = credits + 1;
+          }
+        }
+
+        if(credits>=3){
           this.requirementsMet = true;
         }
       }
@@ -100,7 +144,14 @@ angular.module('grad', ['ui.bootstrap'])
             credits = credits + 1;
           }
         }
-        if(credits>=0){
+
+        for(var i = 0; i<this.otherCourses.length; i++){
+          if(this.otherCourses[i].completed){
+            credits = credits + 1;
+          }
+        }
+
+        if(credits>=4){
           this.requirementsMet = true;
         }
       }
@@ -121,7 +172,14 @@ angular.module('grad', ['ui.bootstrap'])
             credits = credits + 1;
           }
         }
-        if(credits>=0){
+
+        for(var i = 0; i<this.otherCourses.length; i++){
+          if(this.otherCourses[i].completed){
+            credits = credits + 1;
+          }
+        }
+
+        if(credits>=3){
           this.requirementsMet = true;
         }
       }
@@ -142,13 +200,20 @@ angular.module('grad', ['ui.bootstrap'])
             credits = credits + 1;
           }
         }
-        if(credits>=0){
+
+
+        for(var i = 0; i<this.otherCourses.length; i++){
+          if(this.otherCourses[i].completed){
+            credits = credits + 1;
+          }
+        }
+        if(credits>=1){
           this.requirementsMet = true;
         }
       }
     },
     {
-      name: "Foreign Language or Computer Technology",
+      name: "Language/Technology",
       courses: [
         new Course('Spanish I', false),
         new Course('Spanish II', false),
@@ -169,7 +234,14 @@ angular.module('grad', ['ui.bootstrap'])
             credits = credits + 1;
           }
         }
-        if(credits>=0){
+
+        for(var i = 0; i<this.otherCourses.length; i++){
+          if(this.otherCourses[i].completed){
+            credits = credits + 1;
+          }
+        }
+
+        if(credits>=2){
           this.requirementsMet = true;
         }
       }
@@ -187,7 +259,7 @@ angular.module('grad', ['ui.bootstrap'])
             credits = credits + 1;
           }
         }
-        if(credits>=1){
+        if(credits>=6){
           this.requirementsMet = true;
         }
       }
@@ -231,18 +303,6 @@ angular.module('grad', ['ui.bootstrap'])
   this.scoreSelected = "";
 
 
-  this.courseList = {
-    "Mathematics": [],
-    "Laboratory Science":[],
-    "English": [],
-    "History and Citizenship Skills": [],
-    "Fine Arts or Speech": [],
-    "Foreign Language": [],
-    "Computer Technology": [],
-    "Electives":[]
-  };
-
-
   this.testList = {};
   for(var i =0; i<this.eoiTests.length;i++){
     this.testList[this.eoiTests[i]] = {taken: 0,
@@ -250,33 +310,50 @@ angular.module('grad', ['ui.bootstrap'])
   }
  
   this.creditRequirementsMet = false;
-
-
   this.courseRequirementsMet = function(){
     var met = true;
+    var metCount = 0;
     for(var i = 0; i<this.courseOptions.length; i++){
+      this.courseOptions[i].checkRequirements();
       met = met && this.courseOptions[i].requirementsMet;
+      if(this.courseOptions[i].requirementsMet){
+        metCount++;
+      }
     }
     this.creditRequirementsMet = met;
+    this.creditProgress = metCount/7*100;
+    this.cType = this.progressType(this.creditProgress);
   }
 
   this.eoiRequirementsMet = false;
   this.eoiRequirements = function(){
     var countPassed = 0;
-    var requiredPassed = false;
-    if(this.testList['Algebra I'].passed && this.testList['English II'].passed){
-      requiredPassed = true;
-    }
+    var requiredPassed = 0;
+    var totalPassed = 0;
+    if(this.testList['Algebra I'].passed)
+      requiredPassed +=1;
+    if(this.testList['English II'].passed)
+      requiredPassed +=1;
     for(var k in this.testList){
       if(this.testList[k].passed){
         countPassed++;
       }
     }
+    countPassed -= requiredPassed;
 
+    if(countPassed >= 5 && requiredPassed === 1){
+      totalPassed = countPassed - 1;
+    }else if(countPassed >=5 && requiredPassed === 0){
+      totalPassed = countPassed - 2;
+    }else
+      totalPassed = countPassed + requiredPassed;
+
+    this.eoiProgress = totalPassed/5*100;
+    this.eType = this.progressType(this.eoiProgress);
     this.eoiRequirementsMet = (requiredPassed && countPassed >=5);
     return (requiredPassed && countPassed >=5);
   };
-  this.consoleLog = "";
+
   this.addCourse = function(){
     //TODO: IF DUPLCIATE, CONFIRM OVERWRITE
     //Default is to overwrite
@@ -296,21 +373,21 @@ angular.module('grad', ['ui.bootstrap'])
           otherCourse.semesters[this.semesterSelected-1].credit = true;
         }
       otherCourse.semesters[this.semesterSelected-1].grade = this.gradeSelected.name;
-      otherCourse.isComplete();
+      //otherCourse.isComplete();
+      this.isCourseComplete(otherCourse);
     }else{
-      // var courseName = this.courseSelected.name;
-      // var modCourse = _.find(subjectArea.courses, function(course){return course.name === courseName});
-      // this.consoleLog = "IN ELSE " + modCourse;
-      // if(this.gradeSelected.value > 0){
-      //     modCourse.semesters[this.semesterSelected-1].credit = true;
-      //   }
-      // modCourse.semesters[this.semesterSelected-1].grade = this.gradeSelected.name;
-
       if(this.gradeSelected.value > 0){
           this.courseSelected.semesters[this.semesterSelected-1].credit = true;
         }
       this.courseSelected.semesters[this.semesterSelected-1].grade = this.gradeSelected.name;
-      this.courseSelected.isComplete();
+      // this.courseSelected.isComplete();
+      this.isCourseComplete(this.courseSelected);
+    }
+    //Add to gpa
+    this.GPA.creditHours += this.gradeSelected.credits;
+    this.GPA.points += this.gradeSelected.value*this.gradeSelected.credits;
+    if(this.gradeSelected.value>0){
+      this.GPA.creditsEarned += this.gradeSelected.credits;
     }
     //update requirements
     subjectArea.checkRequirements();
@@ -331,6 +408,18 @@ angular.module('grad', ['ui.bootstrap'])
     this.scoreSelected = "";
     this.eoiRequirements(); 
   };
+
+  //fake data!
+  this.courseOptions[0].courses = [{"name":"Algebra I","semesters":[{"credit":true,"grade":"C"},{"credit":false,"grade":"F"}],"requiredCourse":false,"creditsRequired":1,"completed":false},{"name":"Algebra II","semesters":[{"credit":true,"grade":"C"},{"credit":false,"grade":"NA"}],"requiredCourse":false,"creditsRequired":1,"completed":false},{"name":"Geometry","semesters":[{"credit":true,"grade":"D"},{"credit":true,"grade":"C"}],"requiredCourse":false,"creditsRequired":1,"completed":true},{"name":"Trigonometry","semesters":[{"credit":false,"grade":"NA"},{"credit":false,"grade":"NA"}],"requiredCourse":false,"creditsRequired":1,"completed":false},{"name":"Math Analysis","semesters":[{"credit":false,"grade":"NA"},{"credit":false,"grade":"NA"}],"requiredCourse":false,"creditsRequired":1,"completed":false},{"name":"Calculus","semesters":[{"credit":false,"grade":"NA"},{"credit":false,"grade":"NA"}],"requiredCourse":false,"creditsRequired":1,"completed":false},{"name":"AP Statistics","semesters":[{"credit":false,"grade":"NA"},{"credit":false,"grade":"NA"}],"requiredCourse":false,"creditsRequired":1,"completed":false},{"name":"Other","semesters":[{"credit":false,"grade":"NA"},{"credit":false,"grade":"NA"}],"requiredCourse":false,"creditsRequired":1,"completed":false}];
+  this.courseOptions[1].courses = [{"name":"Biology","semesters":[{"credit":true,"grade":"D"},{"credit":true,"grade":"B"}],"requiredCourse":true,"creditsRequired":1,"completed":true},{"name":"Chemistry","semesters":[{"credit":true,"grade":"B"},{"credit":true,"grade":"A"}],"requiredCourse":true,"creditsRequired":1,"completed":true},{"name":"Physics","semesters":[{"credit":false,"grade":"NA"},{"credit":false,"grade":"NA"}],"requiredCourse":true,"creditsRequired":1,"completed":false},{"name":"Other","semesters":[{"credit":false,"grade":"NA"},{"credit":false,"grade":"NA"}],"requiredCourse":false,"creditsRequired":1,"completed":false}];
+  this.courseOptions[1].otherCourses = [{"name":"Anatomy","semesters":[{"credit":true,"grade":"B"},{"credit":true,"grade":"B"}],"requiredCourse":false,"creditsRequired":1,"completed":true}];
+  this.courseOptions[2].courses = [{"name":"English I","semesters":[{"credit":true,"grade":"D"},{"credit":true,"grade":"C"}],"requiredCourse":true,"creditsRequired":1,"completed":true},{"name":"English II","semesters":[{"credit":true,"grade":"B"},{"credit":true,"grade":"B"}],"requiredCourse":true,"creditsRequired":1,"completed":true},{"name":"English III","semesters":[{"credit":true,"grade":"B"},{"credit":true,"grade":"B"}],"requiredCourse":true,"creditsRequired":1,"completed":true},{"name":"English IV","semesters":[{"credit":true,"grade":"A"},{"credit":false,"grade":"NA"}],"requiredCourse":true,"creditsRequired":1,"completed":false}];
+  this.courseOptions[3].courses = [{"name":"United States History","semesters":[{"credit":true,"grade":"A"},{"credit":true,"grade":"B"}],"requiredCourse":true,"creditsRequired":1,"completed":true},{"name":"United States Government","semesters":[{"credit":true,"grade":"B"},{"credit":false,"grade":"NA"}],"requiredCourse":true,"creditsRequired":0.5,"completed":true},{"name":"Oklahoma History","semesters":[{"credit":true,"grade":"B"},{"credit":false,"grade":"NA"}],"requiredCourse":true,"creditsRequired":0.5,"completed":true},{"name":"Other","semesters":[{"credit":false,"grade":"NA"},{"credit":false,"grade":"NA"}],"requiredCourse":false,"creditsRequired":1,"completed":false}];
+  this.courseOptions[4].courses = [{"name":"Music","semesters":[{"credit":true,"grade":"B"},{"credit":true,"grade":"B"}],"requiredCourse":false,"creditsRequired":1,"completed":true},{"name":"Art","semesters":[{"credit":false,"grade":"NA"},{"credit":false,"grade":"NA"}],"requiredCourse":false,"creditsRequired":1,"completed":false},{"name":"Drama","semesters":[{"credit":false,"grade":"NA"},{"credit":false,"grade":"NA"}],"requiredCourse":false,"creditsRequired":1,"completed":false},{"name":"Speech","semesters":[{"credit":false,"grade":"NA"},{"credit":false,"grade":"NA"}],"requiredCourse":false,"creditsRequired":1,"completed":false}];
+  this.courseOptions[5].courses = [{"name":"Spanish I","semesters":[{"credit":true,"grade":"A"},{"credit":true,"grade":"B"}],"requiredCourse":false,"creditsRequired":1,"completed":true},{"name":"Spanish II","semesters":[{"credit":true,"grade":"A"},{"credit":true,"grade":"C"}],"requiredCourse":false,"creditsRequired":1,"completed":true},{"name":"Spanish III","semesters":[{"credit":false,"grade":"NA"},{"credit":false,"grade":"NA"}],"requiredCourse":false,"creditsRequired":1,"completed":false},{"name":"Spanish IV","semesters":[{"credit":false,"grade":"NA"},{"credit":false,"grade":"NA"}],"requiredCourse":false,"creditsRequired":1,"completed":false},{"name":"French I","semesters":[{"credit":false,"grade":"NA"},{"credit":false,"grade":"NA"}],"requiredCourse":false,"creditsRequired":1,"completed":false},{"name":"French II","semesters":[{"credit":false,"grade":"NA"},{"credit":false,"grade":"NA"}],"requiredCourse":false,"creditsRequired":1,"completed":false},{"name":"French III","semesters":[{"credit":false,"grade":"NA"},{"credit":false,"grade":"NA"}],"requiredCourse":false,"creditsRequired":1,"completed":false},{"name":"French IV","semesters":[{"credit":false,"grade":"NA"},{"credit":false,"grade":"NA"}],"requiredCourse":false,"creditsRequired":1,"completed":false},{"name":"Computer Tech I","semesters":[{"credit":false,"grade":"NA"},{"credit":false,"grade":"NA"}],"requiredCourse":false,"creditsRequired":1,"completed":false},{"name":"Computer Tech II","semesters":[{"credit":false,"grade":"NA"},{"credit":false,"grade":"NA"}],"requiredCourse":false,"creditsRequired":1,"completed":false}];
+  this.courseOptions[6].courses = [{"name":"Other","semesters":[{"credit":false,"grade":"NA"},{"credit":false,"grade":"NA"}],"requiredCourse":false,"creditsRequired":1,"completed":false}];
+  this.courseOptions[6].otherCourses = [{"name":"Music Appreciation","semesters":[{"credit":true,"grade":"A"},{"credit":true,"grade":"B"}],"requiredCourse":false,"creditsRequired":1,"completed":true},{"name":"Basketball","semesters":[{"credit":true,"grade":"B"},{"credit":true,"grade":"B"}],"requiredCourse":false,"creditsRequired":1,"completed":true},{"name":"Physical Education","semesters":[{"credit":true,"grade":"D"},{"credit":true,"grade":"B"}],"requiredCourse":false,"creditsRequired":1,"completed":true},{"name":"Culinary Arts I","semesters":[{"credit":true,"grade":"B"},{"credit":true,"grade":"C"}],"requiredCourse":false,"creditsRequired":1,"completed":true},{"name":"Culinary Arts II","semesters":[{"credit":true,"grade":"A"},{"credit":true,"grade":"C"}],"requiredCourse":false,"creditsRequired":1,"completed":true}];
+  this.courseRequirementsMet();
 });
 // 
 
