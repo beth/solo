@@ -13,7 +13,7 @@
 
       <h2>Add Courses</h2>
       <form name="gradesForm" ng-submit='info.addCourse()'>
-  
+
         <select data-ng-options="option as option.name for option in info.courseOptions" ng-model="info.subjectSelected" required>
         </select>
         <select data-ng-options="course as course.name for course in info.subjectSelected.courses" ng-model="info.courseSelected" required>
@@ -40,7 +40,7 @@
       <progressbar class="progress-striped active" value="info.creditProgress" type="{{info.cType}}"> Course Requirements <i ng-show="showWarning">!!! Watch out !!!</i></progressbar>
       <div id = 'creditsInfo'>
         <span ng-repeat="subjectArea in info.courseOptions">
-          <b>{{subjectArea.name}}  : {{subjectArea.requirementsMet}}</b></br>
+        <b>{{subjectArea.name}}  : {{subjectArea.requirementsMet}}</b></br>
         </span>
       </div>
       <div id = 'class'>

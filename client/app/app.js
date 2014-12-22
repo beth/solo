@@ -21,16 +21,6 @@ angular.module('grad', ['ui.bootstrap'])
     this.completed = false;
   };
 
-  // Course.prototype.isComplete = function(){
-  //   var credits = 0;
-  //   if(this.semesters[0].credit)
-  //     credits = credits + 0.5;
-  //   if(this.semesters[1].credit)
-  //     credits = credits + 0.5;
-  //   if(credits === this.creditsRequired){
-  //     this.completed = true;
-  //   }
-  // };
   this.isCourseComplete = function(course){
     var credits = 0;
     if(course.semesters[0].credit)
@@ -85,7 +75,6 @@ angular.module('grad', ['ui.bootstrap'])
       requirementsMet: false,
       requirementMessage: "3 credits needed",
       checkRequirements: function(){
-        //just need three credits of math
         var credits = 0;
         for(var i = 0; i<this.courses.length; i++){
           if(this.courses[i].completed){
@@ -383,14 +372,12 @@ angular.module('grad', ['ui.bootstrap'])
           otherCourse.semesters[this.semesterSelected-1].credit = true;
         }
       otherCourse.semesters[this.semesterSelected-1].grade = this.gradeSelected.name;
-      //otherCourse.isComplete();
       this.isCourseComplete(otherCourse);
     }else{
       if(this.gradeSelected.value > 0){
           this.courseSelected.semesters[this.semesterSelected-1].credit = true;
         }
       this.courseSelected.semesters[this.semesterSelected-1].grade = this.gradeSelected.name;
-      // this.courseSelected.isComplete();
       this.isCourseComplete(this.courseSelected);
     }
     //Add to gpa
