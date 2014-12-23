@@ -3,15 +3,12 @@ angular.module('grad', ['ui.bootstrap'])
   //TODO:
   //[x] Make drop downs for EOI 
   //[x] Make data structure for EOI exams 
-  //[ ] Make functions that evaluate progress for graduation
+  //[x] Make functions that evaluate progress for graduation
   //[x] Make functions that evaluate test progress  
   //[ ] Make information things that show alternatives
   //[ ] Make progress bars
   //[ ] Make log in
   //[ ] Make administrator view 
-  //this commit: fixes bug with class name text input
-
-  //Have array with subject requirements, different data structure for each array? 
 
   var Course = function(courseTitle, reqForGraduation, creditsRequired){
     this.name = courseTitle;
