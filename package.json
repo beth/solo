@@ -1,0 +1,25 @@
+{
+  "name": "willIGraduate",
+  "version": "0.0.0",
+  "description": "",
+  "main": "./server/server.js",
+  "scripts": {
+    "start": "node ./server/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bethjohnson/2014-10-solo"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bethjohnson/2014-10-solo/issues"
+  },
+  "homepage": "https://github.com/bethjohnson/2014-10-solo",
+  "dependencies": {
+    "bower": "^1.3.12",
+    "express": "^4.10.4",
+    "mongoose": "^3.8.20"
+  }
+}
